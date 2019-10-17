@@ -1,10 +1,6 @@
 <template>
   <v-container fluid v-if="formStruct">
-  <material-card color="primary" title="基本信息">
-    <v-row dense>
-        ${content}
-    </v-row>
-  </material-card>
+    ${content}
   </v-container>
 </template>
 

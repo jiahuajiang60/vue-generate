@@ -31,10 +31,12 @@ func (vue *Vue) Run() {
 func (vue *Vue) coreInterperter() {
 	//解释生成子结构
 	for _, v := range data.Fields {
-		println(v)
-		vue.typeInterperter(v, vue.Json[v])
+		//页面布局处理
+		boolean := vue.layout(v)
+		if !boolean {
+			vue.typeInterperter(v, vue.Json[v])
+		}
 	}
-
 	//解释生成主结构
 	vue.mainInterperter()
 	fmt.Println("代码生成结束！")
@@ -57,6 +59,24 @@ func (vue *Vue) mainInterperter() {
 }
 
 /**
+布局处理
+true布局渲染，false其他渲染
+*/
+func (vue *Vue) layout(key string) bool {
+	switch key {
+	case "card-begin":
+		vue.cardBeginInterperter()
+		break
+	case "card-end":
+		vue.cardEndInterperter()
+		break
+	default:
+		return false
+	}
+	return true
+}
+
+/**
 类型转换
 */
 func (vue *Vue) typeInterperter(k string, v interface{}) {
@@ -69,24 +89,67 @@ func (vue *Vue) typeInterperter(k string, v interface{}) {
 	case "select":
 		vue.selectInterperter(k, mapV)
 		break
-	case "card":
-		vue.cardInterperter(mapV)
-		break
+	//case "card":
+	//	vue.cardInterperter(mapV)
+	//	break
 	case "checkbox":
 		vue.checkboxInterperter(k, mapV)
 		break
+	case "input-date":
+		vue.inputDateInterperter(k, mapV)
+		break
+	case "select-group":
+		vue.selectGroupInterperter(k, mapV)
+		break
 	}
-
 }
 
 /**
-card
+card begin
 */
-func (vue *Vue) cardInterperter(v map[string]interface{}) {
-	card := utils.ReadTemp("card")
-	var elementLabel = v["label"]
-	card = strings.ReplaceAll(card, "${label}", elementLabel.(string))
+func (vue *Vue) cardBeginInterperter() {
+	card := utils.ReadTemp("card-begin")
 	vue.Html.WriteString(card)
+}
+
+/**
+card end
+*/
+func (vue *Vue) cardEndInterperter() {
+	card := utils.ReadTemp("card-end")
+	vue.Html.WriteString(card)
+}
+
+func (vue *Vue) inputDateInterperter(k string, v map[string]interface{}) {
+	var elementLabel = v["label"]
+	str := utils.ReadTemp("input-date")
+	str = strings.ReplaceAll(str, "${v-model}", "formData."+k)
+	str = strings.ReplaceAll(str, "${label}", elementLabel.(string))
+	vue.Html.WriteString(str)
+	var formData = vue.Data["formData"].(map[string]interface{})
+	formData[k] = nil
+}
+
+func (vue *Vue) selectGroupInterperter(k string, v map[string]interface{}) {
+	var elementLabel = v["label"]
+	str := utils.ReadTemp("select-group")
+	//str = strings.ReplaceAll(str, "${v-model}", "formData."+k)
+	str = strings.ReplaceAll(str, "${label}", elementLabel.(string))
+	item := strings.Builder{}
+	dataItem := make(map[string]interface{})
+	for k, v := range v["data"].(map[string]interface{}) {
+		strItem := utils.ReadTemp("select")
+		//v-model}" :items="${items}" label="${label}"
+		strItem = strings.ReplaceAll(strItem, "${items}", "formStruct.disease")
+		strItem = strings.ReplaceAll(strItem, "${label}", v.(string))
+		strItem = strings.ReplaceAll(strItem, "${v-model}", "formData.geneticDisease."+k)
+		item.WriteString(strItem)
+		dataItem[k] = nil
+	}
+	str = strings.ReplaceAll(str, "${content}", item.String())
+	vue.Html.WriteString(str)
+	var formData = vue.Data["formData"].(map[string]interface{})
+	formData[k] = dataItem
 }
 
 /**
@@ -123,6 +186,9 @@ func (vue *Vue) selectInterperter(k string, v map[string]interface{}) {
 	formData[k] = nil
 }
 
+/**
+多选框
+*/
 func (vue *Vue) checkboxInterperter(k string, v map[string]interface{}) {
 	//var elementType = v["type"]
 	var elementLabel = v["label"]

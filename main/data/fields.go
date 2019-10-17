@@ -26,6 +26,8 @@ var Fields = []string{
 	"disease",
 	"surgery",
 	"trauma",
+	"bloodTransfusion",
+	"geneticDisease",
 	"geneticDisease",
 	"disabilitySituation",
 	"kitchenExhaust",

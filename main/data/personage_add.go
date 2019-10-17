@@ -369,19 +369,29 @@ const JSON = `
   ]
 },
 "surgery": {
-  "type": "input-data",
+  "type": "input-date",
     "label": "手术",
     "notHave": true
 },
 "trauma": {
-  "type": "input-data",
-    "label": "请输入外伤名称",
+  "type": "input-date",
+    "label": "外伤",
     "notHave": true
 },
-"geneticDisease": {
-  "type": "input-data",
-    "label": "遗传病",
+"bloodTransfusion":{
+	"type": "input-date",
+    "label": "输血",
     "notHave": true
+},
+"geneticDisease":{
+	"type": "select-group",
+    "label": "家族史",
+    "data":{
+		"father":"父亲",
+		"mother":"母亲",
+		"brothersAndSisters":"兄弟姐妹",
+		"children":"子女"
+	}
 },
 "disabilitySituation": {
   "type": "checkbox",
@@ -474,7 +484,7 @@ const JSON = `
   ]
 },
 "drinkingWater": {
-  "tyoe": "select",
+  "type": "select",
     "label": "饮水",
     "data": [
     {
@@ -504,7 +514,7 @@ const JSON = `
   ]
 },
 "toilet": {
-  "tyoe": "select",
+  "type": "select",
     "label": "厕所",
     "data": [
     {

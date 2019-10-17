@@ -1,0 +1,1 @@
+<InputDate v-model="${v-model}" label="${label}"/>
