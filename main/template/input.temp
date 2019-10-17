@@ -1,0 +1,3 @@
+<v-col cols="12" md="2" lg="2">
+<v-text-field v-model="${v-model}" label="${label}" dense></v-text-field>
+</v-col>

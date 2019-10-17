@@ -1,0 +1,57 @@
+<template>
+  <v-container fluid v-if="formStruct">
+  <material-card color="primary" title="基本信息">
+    <v-row dense>
+        ${content}
+    </v-row>
+  </material-card>
+  </v-container>
+</template>
+
+<script>
+    import { mapMutations } from 'vuex'
+
+    export default {
+        name: '${name}',
+        data: () => (
+            ${data}
+        ),
+        methods: {
+            ...mapMutations([
+                'alert'
+            ]),
+        init() {
+          let data = { id: '01' };
+          this.$http.get(this.$api.archives.checkval, data).then(({ data }) => {
+            if (data && data.code === -1) {
+              this.$emit("alert", {
+                color: "red",
+                text: "表单结构获取失败！"
+              });
+              return;
+            }
+            // console.log(data);
+            this.formStruct = data.data.data;
+          });
+        },
+        },
+        created () {
+        this.init()
+        }
+    }
+</script>
+
+<style scoped>
+  .radios {
+    border: 1px #ccc dashed;
+    padding: 0 10px;
+  }
+
+  .radios /deep/ .v-input__control {
+    height: 75px;
+  }
+
+  .radios /deep/ .v-text-field__slot {
+    margin-top: 20px
+  }
+</style>

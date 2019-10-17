@@ -1,0 +1,21 @@
+<v-row dense>
+<v-col cols="12" md="2" lg="2" class="symptom-box">${label}</v-col>
+<v-col cols="12" md="10" lg="10">
+  <v-row dense style="border: 1px dashed #ccc;">
+    <v-col cols="12" md="12" lg="12" class="symptom">
+      <v-row dense>
+          <v-checkbox
+            dense
+            class="mr-2"
+            v-model="${v-model}"
+            v-for="n in formStruct.${k}" :key="n._id"
+            :label="n.name"
+            :value="n"
+            color="primary"
+            hide-details
+          ></v-checkbox>
+      </v-row>
+    </v-col>
+  </v-row>
+</v-col>
+</v-row>

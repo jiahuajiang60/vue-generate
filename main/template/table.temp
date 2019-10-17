@@ -1,0 +1,6 @@
+<v-data-table
+    :headers="${headers}"
+    :items="${items}"
+    hide-default-footer
+    locale="zh-cn"
+    no-data-text="暂无数据" />
