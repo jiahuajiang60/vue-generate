@@ -101,6 +101,12 @@ func (vue *Vue) typeInterperter(k string, v interface{}) {
 	case "select-group":
 		vue.selectGroupInterperter(k, mapV)
 		break
+	case "radio":
+		vue.radioInterperter(k, mapV)
+		break
+	case "date":
+		vue.dateInterperter(k, mapV)
+		break
 	}
 }
 
@@ -120,6 +126,16 @@ func (vue *Vue) cardEndInterperter() {
 	vue.Html.WriteString(card)
 }
 
+func (vue *Vue) dateInterperter(k string, v map[string]interface{}) {
+	var elementLabel = v["label"]
+	str := utils.ReadTemp("date")
+	str = strings.ReplaceAll(str, "${v-model}", k)
+	str = strings.ReplaceAll(str, "${label}", elementLabel.(string))
+	vue.Html.WriteString(str)
+	var formData = vue.Data["formData"].(map[string]interface{})
+	formData[k] = nil
+}
+
 func (vue *Vue) inputDateInterperter(k string, v map[string]interface{}) {
 	var elementLabel = v["label"]
 	str := utils.ReadTemp("input-date")
@@ -129,6 +145,19 @@ func (vue *Vue) inputDateInterperter(k string, v map[string]interface{}) {
 	var formData = vue.Data["formData"].(map[string]interface{})
 	formData[k] = nil
 }
+func (vue *Vue) radioInterperter(k string, v map[string]interface{}) {
+	var elementLabel = v["label"]
+	str := utils.ReadTemp("radio")
+	str = strings.ReplaceAll(str, "${v-model}", "formData."+k)
+	str = strings.ReplaceAll(str, "${v-label}", elementLabel.(string))
+	str = strings.ReplaceAll(str, "${items}", "formStruct."+k)
+	vue.Html.WriteString(str)
+	var formData = vue.Data["formData"].(map[string]interface{})
+	var data = make(map[string]interface{})
+	data["value"] = nil
+	data["date"] = nil
+	formData[k] = data
+}
 
 func (vue *Vue) selectGroupInterperter(k string, v map[string]interface{}) {
 	var elementLabel = v["label"]
@@ -137,6 +166,14 @@ func (vue *Vue) selectGroupInterperter(k string, v map[string]interface{}) {
 	str = strings.ReplaceAll(str, "${label}", elementLabel.(string))
 	item := strings.Builder{}
 	dataItem := make(map[string]interface{})
+	fmt.Println("-------------------")
+	fmt.Println(k)
+	fmt.Println(k)
+	fmt.Println(k)
+	fmt.Println(k)
+	fmt.Println(v["data"])
+	fmt.Println(v["data"])
+	fmt.Println(v["data"])
 	for k, v := range v["data"].(map[string]interface{}) {
 		strItem := utils.ReadTemp("select")
 		//v-model}" :items="${items}" label="${label}"

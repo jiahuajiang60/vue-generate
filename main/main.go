@@ -8,7 +8,7 @@ import (
 )
 
 // 页面名称
-const name = "FamilyProfileInfoAdd"
+const name = "VaccinationInfoAdd"
 
 /**
 启动程序

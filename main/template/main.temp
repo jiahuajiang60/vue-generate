@@ -17,8 +17,8 @@
                 'alert'
             ]),
         init() {
-          let data = { id: '01' };
-          this.$http.get(this.$api.archives.checkval, data).then(({ data }) => {
+          const data = { key: 'DIABETES_BASE_INFO' }
+          this.$http.get(this.$api.form.struct, data).then(({ data }) => {
             if (data && data.code === -1) {
               this.$emit("alert", {
                 color: "red",
@@ -38,16 +38,4 @@
 </script>
 
 <style scoped>
-  .radios {
-    border: 1px #ccc dashed;
-    padding: 0 10px;
-  }
-
-  .radios /deep/ .v-input__control {
-    height: 75px;
-  }
-
-  .radios /deep/ .v-text-field__slot {
-    margin-top: 20px
-  }
 </style>
